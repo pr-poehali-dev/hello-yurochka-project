@@ -2,8 +2,7 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const videoUrl = 'https://drive.google.com/file/d/155dyfnZhIBTojwwFMtXm3p-2lfw9QRfd/view?usp=drivesdk';
-  const embedUrl = `https://drive.google.com/file/d/${videoUrl.match(/\/d\/(.+?)\//)?.[1]}/preview`;
+  const videoUrl = 'https://cloud.mail.ru/public/6521/hfeuWo3Sc';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent to-secondary">
@@ -32,7 +31,7 @@ const Index = () => {
                 
                 <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
                   <iframe
-                    src={`${embedUrl}?autoplay=1`}
+                    src={videoUrl}
                     className="w-full h-full"
                     allow="autoplay"
                     allowFullScreen
