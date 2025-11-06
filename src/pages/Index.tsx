@@ -2,7 +2,8 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const videoUrl = 'https://cloud.mail.ru/public/6521/hfeuWo3Sc';
+  const videoUrl = 'https://disk.yandex.ru/i/WBkcjHvtR7ZiAA';
+  const embedUrl = videoUrl.replace('/i/', '/d/').replace(/\/$/, '');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent to-secondary">
@@ -31,10 +32,11 @@ const Index = () => {
                 
                 <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
                   <iframe
-                    src={videoUrl}
+                    src={embedUrl}
                     className="w-full h-full"
-                    allow="autoplay"
+                    allow="autoplay; fullscreen"
                     allowFullScreen
+                    frameBorder="0"
                   ></iframe>
                 </div>
               </div>
