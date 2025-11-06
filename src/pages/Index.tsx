@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [videoUrl, setVideoUrl] = useState('');
+  const videoUrl = 'https://drive.google.com/file/d/155dyfnZhIBTojwwFMtXm3p-2lfw9QRfd/view?usp=drivesdk';
+  const embedUrl = `https://drive.google.com/file/d/${videoUrl.match(/\/d\/(.+?)\//)?.[1]}/preview`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent to-secondary">
@@ -30,48 +30,14 @@ const Index = () => {
                   </h2>
                 </div>
                 
-                {!videoUrl ? (
-                  <div className="space-y-6">
-                    <p className="text-muted-foreground text-lg">
-                      Загрузите ссылку на видео из облака, чтобы оно отобразилось здесь
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <input
-                        type="text"
-                        placeholder="Вставьте ссылку на видео"
-                        className="flex-1 px-6 py-4 rounded-xl border-2 border-primary/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-lg"
-                        onChange={(e) => setVideoUrl(e.target.value)}
-                        value={videoUrl}
-                      />
-                      <button
-                        onClick={() => {}}
-                        disabled={!videoUrl}
-                        className="px-8 py-4 bg-primary text-primary-foreground rounded-xl font-medium hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg disabled:hover:scale-100"
-                      >
-                        Загрузить
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
-                      <video
-                        controls
-                        className="w-full h-full object-cover"
-                        src={videoUrl}
-                      >
-                        Ваш браузер не поддерживает видео
-                      </video>
-                    </div>
-                    <button
-                      onClick={() => setVideoUrl('')}
-                      className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 mx-auto"
-                    >
-                      <Icon name="RefreshCw" size={16} />
-                      Изменить видео
-                    </button>
-                  </div>
-                )}
+                <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
+                  <iframe
+                    src={`${embedUrl}?autoplay=1`}
+                    className="w-full h-full"
+                    allow="autoplay"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </div>
             </Card>
           </section>
