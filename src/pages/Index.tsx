@@ -3,31 +3,8 @@ import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [videoFile, setVideoFile] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleFileChange = (file: File) => {
-    if (file && file.type.startsWith('video/')) {
-      const url = URL.createObjectURL(file);
-      setVideoFile(url);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFileChange(file);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const [videoUrl, setVideoUrl] = useState('');
+  const [showUrlInput, setShowUrlInput] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent to-secondary">
@@ -47,65 +24,66 @@ const Index = () => {
           <section className="animate-scale-in" style={{ animationDelay: '0.2s', opacity: 0, animation: 'scale-in 0.5s ease-out 0.2s forwards' }}>
             <Card className="overflow-hidden shadow-2xl border-primary/20 bg-white/95 backdrop-blur">
               <div className="p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <Icon name="Video" size={32} className="text-primary" />
-                  <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
-                    Видео-открытка
-                  </h2>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <Icon name="Video" size={32} className="text-primary" />
+                    <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
+                      Видео-открытка
+                    </h2>
+                  </div>
+                  <button
+                    onClick={() => setShowUrlInput(!showUrlInput)}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Icon name="Settings" size={24} />
+                  </button>
                 </div>
                 
-                {!videoFile ? (
-                  <div
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    className={`aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner border-2 border-dashed transition-all ${
-                      isDragging ? 'border-primary bg-primary/5 scale-[1.02]' : 'border-primary/30'
-                    }`}
-                  >
-                    <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                      <Icon name="Upload" size={64} className="text-primary mb-4 opacity-50" />
-                      <p className="text-xl text-foreground mb-2">
-                        Перетащите видео сюда
-                      </p>
-                      <p className="text-muted-foreground mb-6">
-                        или выберите файл
-                      </p>
-                      <label className="px-8 py-4 bg-primary text-primary-foreground rounded-xl font-medium hover:scale-105 active:scale-95 transition-all shadow-lg cursor-pointer">
-                        Выбрать видео
-                        <input
-                          type="file"
-                          accept="video/*"
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) handleFileChange(file);
-                          }}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
-                      <video
-                        controls
-                        autoPlay
-                        className="w-full h-full object-cover"
-                        src={videoFile}
+                {showUrlInput && (
+                  <div className="mb-6 p-4 bg-accent/30 rounded-xl">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Вставьте прямую ссылку на видео-файл (.mp4, .webm, .mov)
+                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="https://example.com/video.mp4"
+                        value={videoUrl}
+                        onChange={(e) => setVideoUrl(e.target.value)}
+                        className="flex-1 px-4 py-2 rounded-lg border border-primary/30 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      />
+                      <button
+                        onClick={() => setShowUrlInput(false)}
+                        className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:scale-105 transition-all"
                       >
-                        Ваш браузер не поддерживает видео
-                      </video>
+                        Применить
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setVideoFile(null)}
-                      className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 mx-auto"
-                    >
-                      <Icon name="RefreshCw" size={16} />
-                      Загрузить другое видео
-                    </button>
                   </div>
                 )}
+                
+                <div className="aspect-video rounded-2xl overflow-hidden bg-muted shadow-inner">
+                  {videoUrl ? (
+                    <video
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                      src={videoUrl}
+                    >
+                      Ваш браузер не поддерживает видео
+                    </video>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                      <Icon name="Video" size={64} className="text-primary/30 mb-4" />
+                      <p className="text-muted-foreground">
+                        Нажмите на иконку настроек выше, чтобы добавить видео
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </Card>
           </section>
